@@ -4,6 +4,7 @@ import cv2
 from resize import resize_image
 from background_removal import remove_background
 from clahe import apply_clahe
+from hsv import convert_to_hsv
 
 # Read image
 image_path = "../input/banana1.png"
@@ -20,6 +21,9 @@ image = remove_background(image)
 
 # Step 3: CLAHE.
 image = apply_clahe(image)
+
+# Step 4: HSV
+image = convert_to_hsv(image)
 
 # Show result
 cv2.imshow("Output", image)
