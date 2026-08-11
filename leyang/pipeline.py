@@ -5,6 +5,7 @@ from resize import resize_image
 from background_removal import remove_background
 from clahe import apply_clahe
 from hsv import convert_to_hsv
+from normalization import normalize_image
 
 # Read image
 image_path = "../input/banana1.png"
@@ -24,6 +25,15 @@ image = apply_clahe(image)
 
 # Step 4: HSV
 image = convert_to_hsv(image)
+
+# Step 5: Normalization
+image = normalize_image(image)
+
+# Convert back to 0-255 ONLY for saving
+image = (image * 255).astype("uint8")
+
+# HSV → BGR for normal display
+image = cv2.cvtColor(image, cv2.COLOR_HSV2BGR)
 
 # Show result
 cv2.imshow("Output", image)
