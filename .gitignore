@@ -1,0 +1,14 @@
+# Python virtual environments
+.venv/
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# PyCharm
+.idea/
+
+# Generated preprocessing outputs for all members
+*/output/
