@@ -2,6 +2,7 @@ import os
 import cv2
 
 from resize import resize_image
+from background_removal import remove_background
 from white_balance import apply_white_balance
 from bilateral_filter import apply_bilateral_filter
 from clahe import apply_clahe
@@ -9,7 +10,7 @@ from normalization import normalize_image
 
 # Read image
 base_dir = os.path.dirname(os.path.abspath(__file__))
-image_path = os.path.join(base_dir, "..", "input", "ripe_banana.jpg")
+image_path = os.path.join(base_dir, "..", "input", "overripe_banana.jpg")
 image = cv2.imread(image_path)
 
 if image is None:
@@ -25,10 +26,13 @@ resized = resize_image(
     height=224
 )
 
-# Step 2: White Balance
-balanced = apply_white_balance(resized)
+# Step 2: Background Removal
+background_removed = remove_background(resized)
 
-# Step 3: Bilateral Filter
+# Step 3: White Balance
+balanced = apply_white_balance(background_removed)
+
+# Step 4: Bilateral Filter
 filtered = apply_bilateral_filter(
     balanced,
     diameter=3,
@@ -36,7 +40,7 @@ filtered = apply_bilateral_filter(
     sigma_space=20
 )
 
-# Step 4: Gentle CLAHE
+# Step 5: Gentle CLAHE
 clahe_roi = apply_clahe(
     filtered,
     clip_limit=0.5,
@@ -50,7 +54,7 @@ enhanced = cv2.addWeighted(
     0
 )
 
-# Step 5: Normalization for MobileNetV2 input
+# Step 6: Normalization for MobileNetV2 input
 normalized = normalize_image(enhanced)
 final_image = (normalized * 255).astype("uint8")
 
