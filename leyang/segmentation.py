@@ -21,8 +21,8 @@ def segment_banana(hsv_image):
 
     dark_peel_mask = cv2.inRange(
         hsv_image,
-        np.array([0, 20, 20]),
-        np.array([35, 255, 210])
+        np.array([0, 8, 10]),
+        np.array([45, 255, 230])
     )
 
     mask = cv2.bitwise_or(peel_mask, dark_peel_mask)

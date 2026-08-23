@@ -95,6 +95,35 @@ def apply_mask(image, mask):
     return result
 
 
+def expand_mask(mask, kernel_size=7, iterations=1):
+    """
+    Expand a mask slightly so the full banana boundary is preserved.
+    """
+
+    if mask is None:
+        raise ValueError("Input mask is None.")
+
+    if len(mask.shape) == 3:
+        mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+
+    _, binary_mask = cv2.threshold(
+        mask,
+        127,
+        255,
+        cv2.THRESH_BINARY
+    )
+
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+    expanded_mask = cv2.dilate(
+        binary_mask,
+        kernel,
+        iterations=iterations
+    )
+
+    return expanded_mask
+
+
 def refine_blemish_mask(mask, kernel_size=3):
     """
     Refine blemish mask while keeping small surface spots.
