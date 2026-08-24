@@ -21,50 +21,50 @@ from normalization import normalize_image
 
 
 def process_image(image_path, output_root):
-    """Run every LW stage for one image and save inspectable outputs."""
+    """Run every LW stage for one image and save its final normalized image."""
     image = cv2.imread(image_path)
     if image is None:
         raise FileNotFoundError(f"Image not found or unreadable: {image_path}")
 
-    image_name = os.path.splitext(os.path.basename(image_path))[0]
-    output_folder = os.path.join(output_root, image_name)
-    os.makedirs(output_folder, exist_ok=True)
-
+    # 1. Resize
     resized = resize_image(image, width=250, height=250)
+
+    # 2. Median Filter
     filtered = apply_median_filter(resized, kernel_size=5)
+
+    # 3. CLAHE
     enhanced = apply_clahe(filtered, clip_limit=2.0, tile_grid_size=(8, 8))
+
+    # 4. HSV
     hsv_image = convert_to_hsv(enhanced)
 
+    # 5. Blemish Segmentation
     banana_mask = estimate_banana_mask(hsv_image, kernel_size=9)
     blemish_mask = segment_blemishes(
         hsv_image, banana_mask, brown_value_threshold=165,
         dark_value_threshold=85, inner_kernel_size=7
     )
+
+    # 6. Morphological Refinement
     refined_blemish_mask = refine_blemish_mask(
         blemish_mask, kernel_size=3, open_iterations=1, close_iterations=1,
         min_region_area=12,
     )
+
+    # 7. GLCM + Blemish Ratio
     features = calculate_surface_features(
         enhanced, banana_mask, refined_blemish_mask,
         distances=(1,), angles=(0, 0.785398, 1.570796, 2.356194), levels=32,
     )
+
+    # 8. Normalization
     normalized = normalize_image(enhanced)
 
-    # Normalized float data is saved as .npy; PNG is a readable 0-255 preview.
-    cv2.imwrite(os.path.join(output_folder, "01_original.jpg"), image)
-    cv2.imwrite(os.path.join(output_folder, "02_resized.jpg"), resized)
-    cv2.imwrite(os.path.join(output_folder, "03_median_filtered.jpg"), filtered)
-    cv2.imwrite(os.path.join(output_folder, "04_clahe.jpg"), enhanced)
-    cv2.imwrite(os.path.join(output_folder, "05_hsv_visualisation.jpg"), cv2.cvtColor(hsv_image, cv2.COLOR_HSV2BGR))
-    cv2.imwrite(os.path.join(output_folder, "06_banana_mask.png"), banana_mask)
-    cv2.imwrite(os.path.join(output_folder, "07_blemish_mask.png"), blemish_mask)
-    cv2.imwrite(os.path.join(output_folder, "08_refined_blemish_mask.png"), refined_blemish_mask)
-    cv2.imwrite(os.path.join(output_folder, "09_normalized_preview.jpg"), (normalized * 255).astype("uint8"))
-
-    import numpy as np
-    np.save(os.path.join(output_folder, "09_normalized.npy"), normalized)
-    with open(os.path.join(output_folder, "surface_features.json"), "w", encoding="utf-8") as file:
-        json.dump(features, file, indent=2)
+    os.makedirs(output_root, exist_ok=True)
+    output_path = os.path.join(output_root, os.path.basename(image_path))
+    final_image = (normalized * 255).astype("uint8")
+    if not cv2.imwrite(output_path, final_image):
+        raise IOError(f"Unable to save final output image: {output_path}")
 
     return features
 
