@@ -2,6 +2,12 @@
 .venv/
 venv/
 
+# HY generated/runtime files
+huaiyu/checkpoint.json
+huaiyu/output/
+huaiyu/output.zip
+huaiyu/failed_images.txt
+
 # Python cache files
 __pycache__/
 *.pyc
@@ -9,6 +15,10 @@ __pycache__/
 
 # PyCharm
 .idea/
+
+# Virtual environments
+.venv/
+*/.venv/
 
 # Generated preprocessing outputs for all members
 */output/
