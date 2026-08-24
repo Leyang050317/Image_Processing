@@ -4,7 +4,7 @@ import numpy as np
 
 def estimate_banana_mask(
     hsv_image,
-    peel_lower=(10, 20, 35),
+    peel_lower=(10, 50, 35),
     peel_upper=(100, 255, 255),
     brown_lower=(0, 20, 20),
     brown_upper=(35, 255, 220),
