@@ -1,38 +1,47 @@
-# huaiyu/background_removal.py
-
-import cv2 as cv
+import cv2
 import numpy as np
-from rembg import remove
 
 
-def remove_background(image):
-    # Convert OpenCV BGR image to RGB
-    rgb_image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+def remove_background(image, mask, background_color=(0, 0, 0)):
+    """
+    Apply a binary mask to an image and remove the background.
 
-    # Perform background removal
-    result = remove(rgb_image)
+    Parameters
+    ----------
+    image : numpy.ndarray
+        Input BGR image.
 
-    # rembg may return an RGBA image
-    if result.shape[2] == 4:
-        rgb = result[:, :, :3]
-        alpha = result[:, :, 3]
+    mask : numpy.ndarray
+        Binary mask where banana = 255 and background = 0.
 
-        # Convert alpha channel into binary mask
-        _, mask = cv.threshold(
-            alpha,
-            127,
-            255,
-            cv.THRESH_BINARY
+    background_color : tuple
+        BGR colour used for the removed background.
+        Default is black.
+
+    Returns
+    -------
+    numpy.ndarray
+        Background-removed BGR image.
+    """
+
+    if image is None:
+        raise ValueError("Input image cannot be None.")
+
+    if mask is None:
+        raise ValueError("Mask cannot be None.")
+
+    if image.shape[:2] != mask.shape[:2]:
+        raise ValueError(
+            "Image and mask dimensions must match."
         )
 
-    else:
-        rgb = result
-        mask = np.ones(
-            result.shape[:2],
-            dtype=np.uint8
-        ) * 255
+    # Create output background
+    output = np.full_like(
+        image,
+        background_color
+    )
 
-    # Convert RGB back to BGR
-    foreground = cv.cvtColor(rgb, cv.COLOR_RGB2BGR)
+    # Copy banana pixels only
+    output[mask > 0] = image[mask > 0]
 
-    return foreground, mask
+    return output
