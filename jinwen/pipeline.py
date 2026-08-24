@@ -2,48 +2,52 @@ import os
 import cv2
 
 from resize import resize_image
+from background_removal import remove_background
+from white_balance import apply_white_balance
 from clahe import apply_clahe
 from hsv import convert_to_hsv
+from colour_ratio import calculate_colour_ratios
 from normalization import normalize_image
 
 # Read image
-image_path = "../input/banana1.png"
+base_dir = os.path.dirname(os.path.abspath(__file__))
+image_path = os.path.join(base_dir, "..", "input", "unripe_banana.jpg")
 image = cv2.imread(image_path)
 
 if image is None:
     raise FileNotFoundError("Image not found.")
 
+output_folder = os.path.join(base_dir, "output")
+os.makedirs(output_folder, exist_ok=True)
+
 # Step 1: Resize
-image = resize_image(image)
+resized = resize_image(
+    image,
+    width=224,
+    height=224
+)
 
-# Step 2: CLAHE
-image = apply_clahe(image)
+# Step 2: Background Removal
+background_removed = remove_background(resized)
 
-# Step 3: HSV
-image = convert_to_hsv(image)
+# Step 3: Gray-World White Balance
+balanced = apply_white_balance(background_removed)
 
-# Step 4: Normalization
-image = normalize_image(image)
+# Step 4: CLAHE
+enhanced = apply_clahe(balanced)
 
-# Convert back to 0-255 ONLY for saving
-image = (image * 255).astype("uint8")
+# Step 5: HSV and colour ratio analysis
+hsv_image = convert_to_hsv(enhanced)
+colour_ratios = calculate_colour_ratios(hsv_image)
 
-# HSV → BGR for normal display
-image = cv2.cvtColor(image, cv2.COLOR_HSV2BGR)
+# Step 6: Normalization for MobileNetV2 input
+normalized = normalize_image(enhanced)
+final_image = (normalized * 255).astype("uint8")
 
-# Show result
-cv2.imshow("Output", image)
+output_path = os.path.join(output_folder, "output.png")
 
-# Save
-output_folder = "output"
-
-filename = os.path.basename(image_path)
-
-output_path = os.path.join(output_folder, filename)
-
-cv2.imwrite(output_path, image)
+cv2.imwrite(output_path, final_image)
 
 print("Saved:", output_path)
-
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+print("Colour ratios:", colour_ratios)
+print("JW MobileNetV2 input image completed.")
