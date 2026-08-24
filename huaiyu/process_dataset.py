@@ -270,38 +270,7 @@ def process_dataset():
     # -----------------------------------------------------
     # Find images
     # -----------------------------------------------------
-
     image_files = get_image_files()
-
-    # =========================================================
-    # TEMPORARY BALANCED VALIDATION TEST
-    # Select up to 25 images from each class folder
-    # =========================================================
-
-    TEST_IMAGES_PER_CLASS = 25
-
-    class_groups = {}
-
-    for image_path in image_files:
-
-        class_name = image_path.parent.name
-
-        if class_name not in class_groups:
-            class_groups[class_name] = []
-
-        if len(class_groups[class_name]) < TEST_IMAGES_PER_CLASS:
-            class_groups[class_name].append(image_path)
-
-    # Combine selected images
-    image_files = []
-
-    for class_name, images in sorted(class_groups.items()):
-        image_files.extend(images)
-
-        print(
-            f"Validation class: {class_name} "
-            f"→ {len(images)} image(s)"
-        )
 
     total_images = len(image_files)
 
