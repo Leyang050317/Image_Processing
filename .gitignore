@@ -11,8 +11,18 @@ __pycache__/
 # PyCharm
 .idea/
 
-
-
 # Runtime files
 **/checkpoint.json
 **/failed_images.txt
+
+# Preprocessed dataset outputs
+huaiyu/output/
+kimwen/output/
+leyang/output/
+liwen/output/
+
+# Preprocessing demonstration outputs
+huaiyu/each_step_output/
+kimwen/each_step_output/
+leyang/each_step_output/
+liwen/each_step_output/
