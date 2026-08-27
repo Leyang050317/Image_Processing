@@ -1,0 +1,5 @@
+true/predicted,overripe,ripe,rotten,unripe
+overripe,345,4,4,0
+ripe,9,512,6,2
+rotten,7,8,586,2
+unripe,0,1,1,284

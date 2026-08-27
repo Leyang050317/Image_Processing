@@ -11,18 +11,8 @@ __pycache__/
 # PyCharm
 .idea/
 
-# Trained deep learning models
-deep_learning/models/
 
-# Generated evaluation results
-deep_learning/results/
-
-# Processed image datasets
-**/output/
 
 # Runtime files
 **/checkpoint.json
 **/failed_images.txt
-
-# Demonstration outputs
-**/each_step_output/
