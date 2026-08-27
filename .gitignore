@@ -1,24 +1,28 @@
-# Python virtual environments
-.venv/
-venv/
-
-# HY generated/runtime files
-huaiyu/checkpoint.json
-huaiyu/output/
-huaiyu/output.zip
-huaiyu/failed_images.txt
-
-# Python cache files
+# Python cache
 __pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
+
+# Virtual environments
+.venv/
+**/.venv/
 
 # PyCharm
 .idea/
 
-# Virtual environments
-.venv/
-*/.venv/
+# Trained deep learning models
+deep_learning/models/
 
-# Generated preprocessing outputs for all members
-*/output/
+# Generated evaluation results
+deep_learning/results/
+
+# Processed image datasets
+**/output/
+
+# Runtime files
+**/checkpoint.json
+**/failed_images.txt
+
+# Demonstration outputs
+**/each_step_output/

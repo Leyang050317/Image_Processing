@@ -71,11 +71,12 @@ FINE_TUNE_LAST_N_LAYERS = 30
 # Change only these two values for each experiment.
 # =========================================================
 
-EXPERIMENT_NAME = "baseline"
+EXPERIMENT_NAME = "kw"
 
 SOURCE_FOLDER = (
     PROJECT_ROOT
-    / "dataset"
+    / "kimwen"
+    / "output"
 )
 
 

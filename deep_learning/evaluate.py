@@ -47,16 +47,17 @@ RESULTS_FOLDER.mkdir(
 # Experiment configuration
 # =========================================================
 
-EXPERIMENT_NAME = "baseline"
+EXPERIMENT_NAME = "kw"
 
 SOURCE_FOLDER = (
     PROJECT_ROOT
-    / "dataset"
+    / "kimwen"
+    / "output"
 )
 
 MODEL_PATH = (
     MODELS_FOLDER
-    / "baseline_final.keras"
+    / "kw_final.keras"
 )
 
 
@@ -710,7 +711,7 @@ def print_summary(
     )
 
     print(
-        "HY MOBILENETV2 TEST RESULTS"
+        "MOBILENETV2 TEST RESULTS"
     )
 
     print(
@@ -789,7 +790,7 @@ def main():
     )
 
     print(
-        "HY MOBILENETV2 EVALUATION"
+        "MOBILENETV2 EVALUATION"
     )
 
     print(
@@ -804,7 +805,7 @@ def main():
     if not MODEL_PATH.exists():
 
         raise FileNotFoundError(
-            f"HY model not found:\n"
+            f"model not found:\n"
             f"{MODEL_PATH}"
         )
 
