@@ -13,18 +13,12 @@ DEEP_LEARNING_FOLDER = Path(__file__).resolve().parent
 MANIFEST_FILE = DEEP_LEARNING_FOLDER / "split_manifest.csv"
 
 MODELS_FOLDER = DEEP_LEARNING_FOLDER / "models"
-RESULTS_FOLDER = DEEP_LEARNING_FOLDER / "results"
+RESULTS_ROOT = DEEP_LEARNING_FOLDER / "results"
 
 MODELS_FOLDER.mkdir(
     parents=True,
     exist_ok=True
 )
-
-RESULTS_FOLDER.mkdir(
-    parents=True,
-    exist_ok=True
-)
-
 
 # =========================================================
 # Experiment configuration
@@ -71,12 +65,22 @@ FINE_TUNE_LAST_N_LAYERS = 30
 # Change only these two values for each experiment.
 # =========================================================
 
-EXPERIMENT_NAME = "kw"
+EXPERIMENT_NAME = "lw"
 
 SOURCE_FOLDER = (
     PROJECT_ROOT
-    / "kimwen"
+    / "liwen"
     / "output"
+)
+
+RESULTS_FOLDER = (
+    RESULTS_ROOT
+    / f"{EXPERIMENT_NAME}_results"
+)
+
+RESULTS_FOLDER.mkdir(
+    parents=True,
+    exist_ok=True
 )
 
 
@@ -85,10 +89,10 @@ SOURCE_FOLDER = (
 # EXPERIMENT_NAME = "baseline"
 # SOURCE_FOLDER = PROJECT_ROOT / "dataset"
 #
-# Later:
+# Liwen:
 #
-# EXPERIMENT_NAME = "jw"
-# SOURCE_FOLDER = PROJECT_ROOT / "jinwen" / "output"
+# EXPERIMENT_NAME = "lw"
+# SOURCE_FOLDER = PROJECT_ROOT / "liwen" / "output"
 
 
 # =========================================================
