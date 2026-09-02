@@ -32,14 +32,9 @@ MODELS_FOLDER = (
     / "models"
 )
 
-RESULTS_FOLDER = (
+RESULTS_ROOT = (
     DEEP_LEARNING_FOLDER
     / "results"
-)
-
-RESULTS_FOLDER.mkdir(
-    parents=True,
-    exist_ok=True
 )
 
 
@@ -47,17 +42,27 @@ RESULTS_FOLDER.mkdir(
 # Experiment configuration
 # =========================================================
 
-EXPERIMENT_NAME = "kw"
+EXPERIMENT_NAME = "lw"
 
 SOURCE_FOLDER = (
     PROJECT_ROOT
-    / "kimwen"
+    / "liwen"
     / "output"
 )
 
 MODEL_PATH = (
     MODELS_FOLDER
-    / "kw_final.keras"
+    / f"{EXPERIMENT_NAME}_final.keras"
+)
+
+RESULTS_FOLDER = (
+    RESULTS_ROOT
+    / f"{EXPERIMENT_NAME}_results"
+)
+
+RESULTS_FOLDER.mkdir(
+    parents=True,
+    exist_ok=True
 )
 
 
